@@ -1,0 +1,16 @@
+#!/usr/bin/env jruby
+$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
+require 'rubygems'
+require 'bundler'
+
+Bundler.setup
+
+
+require 'hope'
+
+EM::run {
+  # Hope::configure(ARGV[0]) unless ARGV[0].nil?
+  e = Hope::Engine.new(ARGV[0], ARGV[1] || 'config/hope.xml')
+  e.deploy(ARGV[2] || 'config/hope.epl')
+  e.start
+}

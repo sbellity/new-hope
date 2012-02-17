@@ -1,0 +1,44 @@
+#!/usr/bin/env jruby
+$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
+require 'rubygems'
+require 'bundler'
+
+Bundler.setup
+
+require 'em-zeromq'
+require 'json'
+
+class Handler
+  
+  def self.ctx
+    @ctx ||= EM::ZeroMQ::Context.new(1)
+  end
+  
+  def initialize
+    @received = 0
+  end
+  
+  def on_readable(socket, messages)
+    @received += 1
+    msg = messages.map &:copy_out_string
+    #events = JSON.parse(msg)
+    puts "\n----------------\n Received: #{msg.inspect}\n-----------------\n\n\n\n\n\n"
+  end    
+  
+end
+
+
+EM.run {
+  @sub = Handler.ctx.bind ZMQ::SUB, "ipc://hope-out", Handler.new
+  @sub.subscribe ''
+
+  @pub = Handler.ctx.bind ZMQ::PUB, "ipc://hope-in"
+  
+  EventMachine::add_periodic_timer( 1 ) do 
+    msg = { :message => "Salut, il est #{Time.now}", :code => rand(20), :type => "TestEvent", :user => { :firstName => "Bob", :lastName => "Bobby" } }.to_json
+    puts "Sending: #{msg}"
+    @pub.send_msg(msg)
+  end
+  
+}
+

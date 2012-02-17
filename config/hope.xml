@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<esper-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.espertech.com/schema/esper"
+    xsi:noNamespaceSchemaLocation="esper-configuration-4-0.xsd">
+    
+    <event-type name="User">
+  		<java-util-map>
+  			<map-property name="firstName" class="string"/>
+  			<map-property name="lastName" class="string"/>
+  		</java-util-map>
+  	</event-type>
+    
+
+    <event-type name="TestEvent">
+  		<java-util-map>
+  			<map-property name="code" class="long"/>
+  			<map-property name="message" class="string"/>
+  			<map-property name="user" class="java.util.Map"/>
+  		</java-util-map>
+  	</event-type>
+
+
+</esper-configuration>

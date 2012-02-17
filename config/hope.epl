@@ -1,0 +1,11 @@
+@Name('all')
+SELECT user, message FROM TestEvent;
+
+
+@Name('users')
+INSERT INTO Users
+  SELECT distinct user FROM TestEvent;
+
+
+@Name('Bobs')
+SELECT * FROM Users WHERE firstName = 'Bob'
